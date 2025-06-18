@@ -11,11 +11,11 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/scripts/board-scripts/the-board-utils.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/scripts/board-scripts/the-board-ui-manager.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/scripts/board-scripts/the-board-navigation.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/scripts/board-scripts/the-board-action-handlers.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/scripts/board-scripts/the-board-logic.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-utils-helpers.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-ui-manager.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-navigation.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-action-handlers.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-logic-manager.js
 // ==/UserScript==
 
 ;(function () {
@@ -35,6 +35,7 @@
   let uiManagerInstance = null; // UIManagerのインスタンスを保持
   let navigationManagerInstance = null; // NavigationManager のインスタンスを保持
   let actionHandlerManagerInstance = null; // ActionHandlerManager のインスタンスを保持
+  let logicManagerInstance = null; // LogicManager のインスタンスを保持
 
   // GM_addStyle は一度だけ実行されれば良いのでメインに記述
   GM_addStyle(`
@@ -155,21 +156,21 @@
       if (lastAction === 'startFullDeletion') {
         updateStatusViaUIManager('全削除処理を開始します...', 'info')
       }
-      await handleAutoDeletionProcessLogic() // ロジックモジュールの関数
+      if (logicManagerInstance) await logicManagerInstance.handleAutoDeletionProcess();
     } else if (isProcessingUpload) {
-      if (lastAction === 'processStarted' && isOnItemsListPageUtil()) { // isOnItemsListPageUtil は utils.js から
+      if (lastAction === 'processStarted' && Utils.isOnItemsListPage()) { // Utils from the-board-utils-helpers.js
         updateStatusViaUIManager('CSVアップロード処理を開始します...', 'info')
       }
-      if (isOnItemsListPageUtil()) { // isOnItemsListPageUtil は utils.js から
+      if (Utils.isOnItemsListPage()) { // Utils from the-board-utils-helpers.js
         if (lastAction === 'processStopped') {
           logJaMain(
             'アップロード処理は停止されました。handleItemsListPage の実行をスキップします。'
           )
           return
         }
-        await handleItemsListPageLogic() // ロジックモジュールの関数
-      } else if (isOnCsvImportPageUtil()) { // isOnCsvImportPageUtil は utils.js から
-        await handleCsvImportPageLogic() // ロジックモジュールの関数
+        if (logicManagerInstance) await logicManagerInstance.handleItemsListPage();
+      } else if (Utils.isOnCsvImportPage()) { // Utils from the-board-utils-helpers.js
+        if (logicManagerInstance) await logicManagerInstance.handleCsvImportPage();
       } else {
         updateStatusViaUIManager("<span class='error'>不明なページです。</span>処理を停止します。", 'error')
         logJaMain(
@@ -205,25 +206,31 @@
     logJaMain('ドキュメント準備完了。初回ロードのためのUIとロジックを初期化中。')
     // currentUrlMain = window.location.href; // navigation モジュールで管理
 
+    // LogicManager のインスタンス生成
+    logicManagerInstance = new LogicManager(
+        updateStatusViaUIManager,
+        mainHandleStopProcess
+        // UI再初期化は mainLogicGlobal -> NavigationManager 経由で行われるため、直接のinitUIコールバックは不要かも
+    );
+
     // ActionHandlerManager のインスタンス生成
     actionHandlerManagerInstance = new ActionHandlerManager(
-        handleStartUploadProcessLogic, // from the-board-logic.js
-        handleStartDeleteAllProcessLogic, // from the-board-logic.js
+        () => logicManagerInstance.handleStartUploadProcess(), // LogicManagerのメソッドを渡す
+        () => logicManagerInstance.handleStartDeleteAllProcess(), // LogicManagerのメソッドを渡す
         mainLogicGlobal
     );
 
     // UIManagerのインスタンス生成
     uiManagerInstance = new UIManager(
-        () => actionHandlerManagerInstance.handleStartUpload(), // UIManagerには関数として渡す
-        () => actionHandlerManagerInstance.handleStartDeleteAll(), // UIManagerには関数として渡す
+        () => actionHandlerManagerInstance.handleStartUpload(),
+        () => actionHandlerManagerInstance.handleStartDeleteAll(),
         mainHandleStopProcess
     );
 
-    // ロジックモジュールの初期化 (依存関係を注入)
-    initLogicModule(updateStatusViaUIManager, mainHandleStopProcess, () => {
-        if(uiManagerInstance) uiManagerInstance.initUI();
-    });
-
+    // initLogicModule は LogicManager のコンストラクタ呼び出しに置き換わったため不要
+    // if (typeof initLogicModule === 'function') { // 古いlogic.jsの関数がまだ存在する場合の呼び出し（互換性のため、将来的には削除）
+    //    initLogicModule(updateStatusViaUIManager, mainHandleStopProcess, () => { if(uiManagerInstance) uiManagerInstance.initUI(); });
+    // }
     // NavigationManager のインスタンス生成と監視開始
     navigationManagerInstance = new NavigationManager(
         () => { if(uiManagerInstance) uiManagerInstance.initUI(); }, // UI再初期化コールバック
@@ -242,7 +249,7 @@
       `ドキュメント準備完了時 - アップロード処理中: ${isProcessingUpload}, 削除処理中: ${isDeleting}, 最終アクション: ${lastAction}`
     )
 
-    if (isOnItemsListPageUtil()) { // isOnItemsListPageUtil は utils.js から
+    if (Utils.isOnItemsListPage()) { // Utils from the-board-utils-helpers.js
       if (lastAction === 'uploadingFile') {
         logJaMain(
           "品目一覧ページロード時、最終アクションが 'uploadingFile' でした。'navigatedBackToItems' に修正します。"
@@ -252,7 +259,7 @@
       } else if (
         !isDeleting &&
         isProcessingUpload &&
-        !hasItemsOnListPageUtil() && // hasItemsOnListPageUtil は utils.js から
+        !Utils.hasItemsOnListPage() && // Utils from the-board-utils-helpers.js
         (lastAction === 'processStarted' || lastAction === 'navigatingToImportPage')
       ) {
         logJaMain(
