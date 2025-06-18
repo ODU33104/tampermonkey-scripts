@@ -11,9 +11,9 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
-// @require      https://cdn.jsdelivr.net/gh/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME@COMMIT_HASH_OR_TAG/tampermonkey-scripts/the-board-utils.js
-// @require      https://cdn.jsdelivr.net/gh/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME@COMMIT_HASH_OR_TAG/tampermonkey-scripts/the-board-ui.js
-// @require      https://cdn.jsdelivr.net/gh/YOUR_GITHUB_USERNAME/YOUR_REPOSITORY_NAME@COMMIT_HASH_OR_TAG/tampermonkey-scripts/the-board-logic.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/tampermonkey-scripts/the-board-utils.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/tampermonkey-scripts/the-board-ui.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.0/tampermonkey-scripts/the-board-logic.js
 // ==/UserScript==
 
 ;(function () {
