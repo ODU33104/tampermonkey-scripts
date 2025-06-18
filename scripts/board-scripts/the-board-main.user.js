@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Board - CSV Auto Uploader & Deleter
 // @namespace    http://tampermonkey.net/
-// @version      1.14
+// @version      1.15
 // @description  Automates sequential CSV file uploads and bulk deletion to the-board.jp/items.
 // @author       You
 // @match        https://the-board.jp/items
@@ -11,11 +11,11 @@
 // @grant        GM_deleteValue
 // @grant        GM_addStyle
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-utils-helpers.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-ui-manager.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-navigation.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-action-handlers.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-logic-manager.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.6/scripts/board-scripts/the-board-utils-helpers.js // Constants and Utils class
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.6/scripts/board-scripts/the-board-ui-manager.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.6/scripts/board-scripts/the-board-navigation.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.6/scripts/board-scripts/the-board-action-handlers.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.6/scripts/board-scripts/the-board-logic-manager.js // LogicManager class
 // ==/UserScript==
 
 ;(function () {
