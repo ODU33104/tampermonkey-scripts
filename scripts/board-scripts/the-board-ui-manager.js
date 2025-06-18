@@ -68,7 +68,7 @@ class UIManager {
     }
 
     #initItemsListPageUI() {
-        // SELECTORS_GLOBAL, isOnItemsListPageUtil, hasItemsOnListPageUtil は a_utils.js で定義されている前提
+        // SELECTORS_GLOBAL, Utils.isOnItemsListPage, Utils.hasItemsOnListPage は a_utils.js で定義されている前提
         const itemsPageControlsContainer = $(SELECTORS_GLOBAL.csvImportLink).parent();
         const uiContainer = $('<div id="auto-uploader-ui-container"></div>');
 
@@ -82,7 +82,7 @@ class UIManager {
         const buttonContainer = $('<span class="auto-uploader-button-container"></span>');
         buttonContainer.append(this.#createStartUploadButton());
 
-        if (hasItemsOnListPageUtil()) {
+        if (Utils.hasItemsOnListPage()) {
             buttonContainer.append(this.#createStartDeleteAllButton());
             logJaUIManager('自動全削除ボタンを追加しました。');
         } else {
@@ -104,7 +104,7 @@ class UIManager {
     }
 
     #initCsvImportPageUI() {
-        // SELECTORS_GLOBAL, isOnCsvImportPageUtil は a_utils.js で定義されている前提
+        // SELECTORS_GLOBAL, Utils.isOnCsvImportPage は a_utils.js で定義されている前提
         const importPageForm = $(SELECTORS_GLOBAL.csvImportForm);
         importPageForm.before(this.#createStatusPanel());
         logJaUIManager('ステータスパネルをCSVインポートフォームの前に追加しました。');
@@ -132,10 +132,10 @@ class UIManager {
         logJaUIManager('UIを初期化しています: ' + window.location.href);
         this.#removeExistingUIElements();
 
-        // isOnItemsListPageUtil, isOnCsvImportPageUtil, SELECTORS_GLOBAL は a_utils.js で定義されている前提
-        if (isOnItemsListPageUtil() && $(SELECTORS_GLOBAL.csvImportLink).parent().length) {
+        // Utils.isOnItemsListPage, Utils.isOnCsvImportPage, SELECTORS_GLOBAL は a_utils.js で定義されている前提
+        if (Utils.isOnItemsListPage() && $(SELECTORS_GLOBAL.csvImportLink).parent().length) {
             this.#initItemsListPageUI();
-        } else if (isOnCsvImportPageUtil() && $(SELECTORS_GLOBAL.csvImportForm).length) {
+        } else if (Utils.isOnCsvImportPage() && $(SELECTORS_GLOBAL.csvImportForm).length) {
             this.#initCsvImportPageUI();
         } else {
             this.#initFallbackUI();
