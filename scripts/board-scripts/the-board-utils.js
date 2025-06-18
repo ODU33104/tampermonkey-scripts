@@ -1,4 +1,3 @@
-// the-board-utils.js
 'use strict';
 
 const SCRIPT_NAME_UTIL = 'The Board - CSV Auto Uploader & Deleter (Utils)'; 

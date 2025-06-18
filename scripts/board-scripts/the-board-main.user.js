@@ -12,9 +12,9 @@
 // @grant        GM_addStyle
 // @require      https://code.jquery.com/jquery-3.7.1.min.js
 // @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-utils-helpers.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-ui-manager.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-navigation.js
-// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.3/scripts/board-scripts/the-board-action-handlers.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-ui-manager.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-navigation.js
+// @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-action-handlers.js
 // @require      https://cdn.jsdelivr.net/gh/ODU33104/tampermonkey-scripts@v1.4/scripts/board-scripts/the-board-logic-manager.js
 // ==/UserScript==
 
