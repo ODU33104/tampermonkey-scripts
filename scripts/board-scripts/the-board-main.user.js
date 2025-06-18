@@ -29,8 +29,6 @@
   }
 
   // グローバル変数はメインスクリプトで宣言し、必要に応じてモジュールに渡す
-  // let currentUrlMain = window.location.href; // navigation モジュールで管理
-  // let urlCheckTimeoutIdMain = null; // navigation モジュールで管理
   let mainObserver = null; // メインスクリプトで MutationObserver を使う場合 (mainHandleStopProcessでクリア)
   let uiManagerInstance = null; // UIManagerのインスタンスを保持
   let navigationManagerInstance = null; // NavigationManager のインスタンスを保持
