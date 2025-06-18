@@ -1,7 +1,7 @@
 // ==UserScript==
 // @name         The Board - CSV Auto Uploader & Deleter
 // @namespace    http://tampermonkey.net/
-// @version      1.13
+// @version      1.14
 // @description  Automates sequential CSV file uploads and bulk deletion to the-board.jp/items.
 // @author       You
 // @match        https://the-board.jp/items

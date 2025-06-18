@@ -1,4 +1,3 @@
-// the-board-logic-manager.js
 'use strict';
 
 const SCRIPT_NAME_LOGIC_MANAGER = 'The Board - CSV Auto Uploader & Deleter (LogicManager)';
