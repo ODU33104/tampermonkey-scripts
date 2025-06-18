@@ -9,11 +9,17 @@ This repository contains Tampermonkey userscripts designed to enhance functional
 *   **Description**: This script automates the process of sequentially uploading multiple CSV files to `the-board.jp/items` and provides functionality for bulk deleting all existing items.
 *   **Files**:
     *   `scripts/board-scripts/the-board-main.user.js` (Main userscript file)
-    *   `scripts/board-scripts/the-board-utils-helpers.js` (Utility class `Utils` and global constants)
+    *   `scripts/board-scripts/the-board-utils-helpers.js` (Utility class `Utils` and global constants). This file contains:
+        *   `BASE_FILENAME_PREFIX_GLOBAL`: Defines the prefix for the CSV filenames the script looks for (e.g., `coreDB_board品目管理データ_`). The script expects filenames in the format `coreDB_board品目管理データ_<number>.csv`. You can change this constant if your CSV files use a different naming prefix.
+        *   `MAX_FILES_TO_TRY_GLOBAL`: The maximum number of sequentially numbered CSV files the script will attempt to upload in one session.
+        *   `OBSERVER_TIMEOUT_MS_GLOBAL`: Timeout in milliseconds for MutationObservers waiting for specific page elements to appear (e.g., on the CSV import page).
+        *   `DIALOG_WAIT_TIMEOUT_MS_GLOBAL`: Timeout in milliseconds for waiting for confirmation dialogs (e.g., delete confirmation).
+        *   `PAGE_TRANSITION_DELAY_MS_GLOBAL`: A short delay in milliseconds to allow for page transitions before the script proceeds with an action (e.g., clicking a link to navigate).
+        *   `URL_CHECK_DELAY_MS_GLOBAL`: Delay in milliseconds for checking if the URL has changed, which triggers UI and logic re-initialization.
     *   `scripts/board-scripts/the-board-ui-manager.js` (UI management class `UIManager`)
     *   `scripts/board-scripts/the-board-navigation.js` (Navigation and URL monitoring class `NavigationManager`)
     *   `scripts/board-scripts/the-board-action-handlers.js` (Event handling class `ActionHandlerManager`)
-    *   `scripts/board-scripts/the-board-utils.js` (Utility functions and constants)
+    *   `scripts/board-scripts/the-board-logic-manager.js` (Business logic class `LogicManager`)
 *   **Installation**: Install this script via Tampermonkey by adding the `the-board-main.user.js` file or by installing it from a raw GitHub link once published.
 
 ## Setup & Usage
