@@ -4,19 +4,32 @@
 const SCRIPT_NAME_UTILS_HELPERS = 'The Board - CSV Auto Uploader & Deleter (UtilsHelpers)';
 const LOG_PREFIX_UTILS_HELPERS = `[${SCRIPT_NAME_UTILS_HELPERS}] `;
 
-// logJaUtil は元の the-board-utils.js にある想定ですが、
-// このファイル単体でログ出力が必要な場合は別途定義するか、
-// グローバルなログ関数がある前提とします。
-// ここでは、Utilsクラス内で直接 console.log を使うか、
-// logJaUtil がグローバルに存在すると仮定します。
 function logJaUtilsHelper(message) {
-    // グローバルな logJaUtil があればそれを使う
-    if (typeof logJaUtil === 'function') {
-        logJaUtil(LOG_PREFIX_UTILS_HELPERS + message);
-    } else {
-        console.log(LOG_PREFIX_UTILS_HELPERS + message);
-    }
+    console.log(LOG_PREFIX_UTILS_HELPERS + message);
 }
+
+// Constants moved from the-board-utils.js
+const BASE_FILENAME_PREFIX_GLOBAL = 'coreDB_board品目管理データ_';
+const MAX_FILES_TO_TRY_GLOBAL = 50;
+const OBSERVER_TIMEOUT_MS_GLOBAL = 10000;
+const DIALOG_WAIT_TIMEOUT_MS_GLOBAL = 10000;
+const PAGE_TRANSITION_DELAY_MS_GLOBAL = 300;
+const URL_CHECK_DELAY_MS_GLOBAL = 300;
+
+const SELECTORS_GLOBAL = {
+    itemsTableBody: 'tbody',
+    itemsTableRow: 'tbody tr',
+    selectAllCheckbox: '.js_check_all',
+    noSearchResultMessage: '#no_search_result_message.alert.alert-warning',
+    bulkDeleteButton: 'button[data-test-id="bulk_destroy_button"]',
+    dialog: '.modal-dialog:has(#dialog_title:contains("確認"))',
+    dialogOkButton: 'button[data-test-id="dialog_confirm_ok_button"]',
+    csvImportLink: 'a.btn.btn-light.btn-sm[href="/items/csv_import/new"]',
+    csvImportForm: 'form[action="/items/csv_import"]',
+    csvFileInput: '#items_csv',
+    csvUploadButton: 'input[type="submit"][name="commit"][value="アップロード"]',
+};
+
 
 class Utils {
     static isOnItemsListPage() {
@@ -28,7 +41,7 @@ class Utils {
     }
 
     static hasItemsOnListPage() {
-        const noDataMessage = $(SELECTORS_GLOBAL.noSearchResultMessage); // SELECTORS_GLOBAL は the-board-utils.js から
+        const noDataMessage = $(SELECTORS_GLOBAL.noSearchResultMessage);
         if (noDataMessage.length > 0 && noDataMessage.is(':visible')) {
             logJaUtilsHelper("「データがありません」メッセージが表示されています。");
             return false;
@@ -44,7 +57,7 @@ class Utils {
 
         return new Promise((resolve, reject) => {
             const checkDialog = () => {
-                const dialog = $(SELECTORS_GLOBAL.dialog); // SELECTORS_GLOBAL は the-board-utils.js から
+                const dialog = $(SELECTORS_GLOBAL.dialog);
                 if (dialog.length && dialog.is(':visible')) {
                     logJaUtilsHelper('確認ダイアログが見つかりました。');
                     if (dialogObserver) dialogObserver.disconnect();
@@ -74,9 +87,9 @@ class Utils {
                 if (dialogObserver) {
                     dialogObserver.disconnect();
                     dialogObserver = null;
-                    reject(new Error(`削除確認ダイアログが表示されませんでした (${DIALOG_WAIT_TIMEOUT_MS_GLOBAL / 1000}秒)。`)); // DIALOG_WAIT_TIMEOUT_MS_GLOBAL は the-board-utils.js から
+                    reject(new Error(`削除確認ダイアログが表示されませんでした (${DIALOG_WAIT_TIMEOUT_MS_GLOBAL / 1000}秒)。`));
                 }
-            }, DIALOG_WAIT_TIMEOUT_MS_GLOBAL); // DIALOG_WAIT_TIMEOUT_MS_GLOBAL は the-board-utils.js から
+            }, DIALOG_WAIT_TIMEOUT_MS_GLOBAL);
         }).catch((error) => {
             logJaUtilsHelper(`waitForDialogAndConfirm error: ${error.message}`);
             if (typeof stopHandler === 'function') {

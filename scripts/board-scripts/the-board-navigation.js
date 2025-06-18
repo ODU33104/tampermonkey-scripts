@@ -77,7 +77,7 @@ class NavigationManager {
                     }
                 }
             }
-        }, URL_CHECK_DELAY_MS_GLOBAL); // URL_CHECK_DELAY_MS_GLOBAL は utils.js から
+        }, URL_CHECK_DELAY_MS_GLOBAL);
     }
 
     startMonitoring() {
